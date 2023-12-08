@@ -155,16 +155,19 @@ public abstract class AbstractDAO<T> {
         }
     }
 
-    public List<T> getAll(Class<T> cls) {
+    public List<T> getAll(Class<T> cls, String... columns) {
         List<T> res = new ArrayList<>();
 
         try {
+
+
             try (Statement st = conn.createStatement()) {
-                try (ResultSet rs = st.executeQuery("SELECT * FROM " + table)) {
+                String columnList = columns.length > 0 ? String.join(", ", columns) : "*";
+                try (ResultSet rs = st.executeQuery("SELECT " + columnList + " FROM " + table)) {
                     ResultSetMetaData md = rs.getMetaData();
 
                     while (rs.next()) {
-                        T t = cls.getDeclaredConstructor().newInstance(); //!!!
+                        T t = cls.getDeclaredConstructor().newInstance();
 
                         for (int i = 1; i <= md.getColumnCount(); i++) {
                             String columnName = md.getColumnName(i);
@@ -184,6 +187,7 @@ public abstract class AbstractDAO<T> {
             throw new RuntimeException(ex);
         }
     }
+
 
     private Field getPrimaryKeyField(T t, Field[] fields) {
         Field result = null;

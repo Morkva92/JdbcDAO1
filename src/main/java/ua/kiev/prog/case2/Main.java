@@ -36,14 +36,16 @@ public class Main {
             list.get(0).setAge(55);
             dao.update(list.get(0));
 
-            /* Dz2
+            //Dz2
 
-            List<Client> list = dao.getAll(Client.class, "name", "age");
-            List<Client> list = dao.getAll(Client.class, "age");
-            for (Client cli : list)
+            List<Client> listNameAge = dao.getAll(Client.class, "name", "age");
+            for (Client cli : listNameAge)
+                System.out.println(cli);
+            List<Client> listAge = dao.getAll(Client.class, "age");
+            for (Client cli : listAge)
                 System.out.println(cli);
 
-             */
+
 
             dao.delete(list.get(0));
         }
